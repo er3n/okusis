@@ -30,7 +30,9 @@ export default class PassengerScreen extends React.Component {
 
     }
 
+
     render() {
+
         return (
             <FlatList
                 data={this.state.passengers}
