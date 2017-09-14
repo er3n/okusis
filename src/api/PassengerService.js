@@ -16,5 +16,21 @@ export default class PassengerService {
 
     }
 
+    async updatePassenger(passenger) {
+
+        let response = await fetch("http://192.168.1.26:8080/api/oku-yolcus", {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': JWT_TOKEN,
+            },
+            body: JSON.stringify(passenger)
+        });
+
+        return response;
+
+    }
+
 
 }
