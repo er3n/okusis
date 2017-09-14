@@ -2,6 +2,7 @@ import React from 'react';
 
 import {View, Button, Text, TextInput, Alert} from 'react-native';
 import _ from 'lodash'
+import AccountService from '../api/AccountService';
 
 export default class LoginScreen extends React.Component {
 
@@ -10,20 +11,11 @@ export default class LoginScreen extends React.Component {
         this.state = {username: '', password: '', isProcessing: false};
     }
 
-    submit(e) {
+    submit() {
 
-        this.setState({isProcessing: true});
+        //this.setState({isProcessing: true});
 
-        fetch('https://aracla.com/api/models')
-            .then((response) => response.json())
-            .then((responseJson) => {
-                Alert.alert('Hata', responseJson[0].code);
-                this.setState({isProcessing: false});
-            })
-            .catch((error) => {
-                console.error(error);
-                this.setState({isProcessing: false});
-            });
+        new AccountService().authenticate(this.state.username, this.state.password);
 
 
     }
@@ -73,7 +65,6 @@ export default class LoginScreen extends React.Component {
                     <Button style={{width: 80}}
                             onPress={(e) => this.submit(e)}
                             title="Giriş"
-                            color="#841584"
                             disabled={_.isEmpty(this.state.username) || _.isEmpty(this.state.password) || this.state.isProcessing}
                     />
 
