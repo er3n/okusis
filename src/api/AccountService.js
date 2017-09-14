@@ -1,11 +1,36 @@
 import {Alert} from 'react-native';
 
 import {AsyncStorage} from 'react-native'
+import _ from 'lodash';
 
 export default class AccountService {
 
+    static JWT_TOKEN = null;
 
-    async authenticate(username, password) {
+    async loadUser() {
+
+        JWT_TOKEN = await AsyncStorage.getItem('@OkusisStore:jwtToken');
+
+        if (_.isEmpty(JWT_TOKEN)) {
+            return null;
+        }
+
+        let response = await fetch("http://192.168.1.26:8080/api/authenticate", {
+            headers: {
+                'Authorization': JWT_TOKEN,
+            }
+        });
+
+        if (response.status !== 200) {
+            return null;
+        }
+
+        return JWT_TOKEN;
+
+    }
+
+
+    async authenticate(username, password, navigate) {
 
         let response = await fetch("http://192.168.1.26:8080/api/authenticate", {
             method: 'POST',
@@ -29,18 +54,20 @@ export default class AccountService {
         let jwtTooken = response.headers.get("authorization");
 
         await AsyncStorage.setItem('@OkusisStore:jwtToken', jwtTooken);
-        await AsyncStorage.setItem('@OkusisStore:username', username);
 
-        let dbTooken = await AsyncStorage.getItem('@OkusisStore:username');
-
-        Alert.alert('Giris Basarili', username);
+        Alert.alert('Giris Basarili', "Anasayfaya yönlenmek için tamama basınız",
+            [
+                {text: 'Tamam', onPress: () => navigate("Route")},
+            ],
+            { cancelable: false });
         return true;
     }
 
-    async unauthenticate(username, password) {
+    async unauthenticate(navigate) {
 
-        await AsyncStorage.setItem('@OkusisStore:jwtToken', null);
-        await AsyncStorage.setItem('@OkusisStore:username', null);
+        await AsyncStorage.removeItem('@OkusisStore:jwtToken', null);
+
+        navigate("Route");
     }
 
 

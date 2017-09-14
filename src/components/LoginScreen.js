@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {View, Button, Text, TextInput, AsyncStorage} from 'react-native';
-import _ from 'lodash'
+import _ from 'lodash';
 import AccountService from '../api/AccountService';
 
 export default class LoginScreen extends React.Component {
@@ -11,20 +11,11 @@ export default class LoginScreen extends React.Component {
         this.state = {username: '', password: '', isProcessing: false};
     }
 
-
-
-    componentDidMount() {
-
-        AsyncStorage.getItem('@OkusisStore:username').then((username) => this.setState({username}));
-
-
-    }
-
     submit() {
 
         //this.setState({isProcessing: true});
 
-        new AccountService().authenticate(this.state.username, this.state.password);
+        new AccountService().authenticate(this.state.username, this.state.password, this.props.navigation.navigate);
 
 
     }
