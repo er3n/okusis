@@ -3,8 +3,9 @@ import {Alert} from 'react-native';
 export default class AccountService {
 
 
-    authenticate(username, password) {
-        fetch("http://192.168.1.26:8080/api/authenticate", {
+    async authenticate(username, password) {
+
+        let response = await fetch("http://192.168.1.26:8080/api/authenticate", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -15,20 +16,17 @@ export default class AccountService {
                 password: password,
                 rememberMe: true
             })
-        })
-            .then((response) => {
-                if(response.status === 200){
-                    return response.json();
-                }else {
-                    throw "Kullanici Adı/Şifre Hatalı";
-                }
-            })
-            .then(responseJson=>{
-                Alert.alert('Giris Basarili', responseJson.id_token);
-            })
-            .catch((error) => {
-                Alert.alert('Giriş Basarısız', error);
-            });
+        });
+
+        if(response.status !== 200){
+            Alert.alert('Giris Başarısız', 'Hatalı Kullanıcı Adı yada Parola');
+            return false;
+        }
+
+
+        let jwtTooken = response.headers.get("authorization");
+        Alert.alert('Giris Basarili', jwtTooken);
+        return true;
     }
 
 
