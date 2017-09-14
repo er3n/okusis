@@ -16,6 +16,13 @@ export default class MainScreen extends React.Component {
                 />
 
                 <Button
+                    title="PassengerScreen"
+                    onPress={() =>
+                        navigate('Passenger')
+                    }
+                />
+
+                <Button
                     title="Çıkış"
                     onPress={() => new AccountService().unauthenticate(navigate)
                     }

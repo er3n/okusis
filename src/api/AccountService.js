@@ -3,9 +3,10 @@ import {Alert} from 'react-native';
 import {AsyncStorage} from 'react-native'
 import _ from 'lodash';
 
+export let JWT_TOKEN = null;
+
 export default class AccountService {
 
-    static JWT_TOKEN = null;
 
     async loadUser() {
 
