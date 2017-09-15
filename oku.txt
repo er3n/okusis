@@ -1,0 +1,8 @@
+npm run start
+
+npm install exp --global
+--exp init okusis
+--cd okusis
+exp start
+
+exp publish

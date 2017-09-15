@@ -16,7 +16,7 @@ export default class AccountService {
             return null;
         }
 
-        let response = await fetch("http://192.168.1.26:8080/api/authenticate", {
+        let response = await fetch("http://www.ozelcozum.net/api/authenticate", {
             headers: {
                 'Authorization': JWT_TOKEN,
             }
@@ -33,7 +33,7 @@ export default class AccountService {
 
     async authenticate(username, password, navigate) {
 
-        let response = await fetch("http://192.168.1.26:8080/api/authenticate", {
+        let response = await fetch("http://www.ozelcozum.net/api/authenticate", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
