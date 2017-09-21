@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {Text, AsyncStorage} from 'react-native';
-import AccountService from '../api/AccountService';
+import {loadUser} from '../api/AccountService';
 import _ from 'lodash';
 
 
@@ -9,7 +9,7 @@ export default class RouteScreen extends React.Component {
 
     componentDidMount() {
 
-        new AccountService().loadUser().then(jwtToken=>{
+        loadUser().then(jwtToken=>{
             if(_.isEmpty(jwtToken)){
                 this.props.navigation.navigate('Login');
             }else{

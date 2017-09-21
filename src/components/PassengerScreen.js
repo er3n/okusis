@@ -22,15 +22,6 @@ export default class PassengerScreen extends React.Component {
         this.loadPassengers();
     }
 
-    ogrenciDurumuDegisti(item) {
-        item.bindiMi = !item.bindiMi;
-
-        new PassengerService().updatePassenger(item).then(() => {
-            this.loadPassengers();
-        });
-
-    }
-
     render() {
 
         return (

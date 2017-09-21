@@ -2,7 +2,7 @@ import React from 'react';
 
 import {View, Button, Text, TextInput, AsyncStorage} from 'react-native';
 import _ from 'lodash';
-import AccountService from '../api/AccountService';
+import {authenticate} from '../api/AccountService';
 
 export default class LoginScreen extends React.Component {
 
@@ -12,12 +12,7 @@ export default class LoginScreen extends React.Component {
     }
 
     submit() {
-
-        //this.setState({isProcessing: true});
-
-        new AccountService().authenticate(this.state.username, this.state.password, this.props.navigation.navigate);
-
-
+        authenticate(this.state.username, this.state.password, this.props.navigation.navigate);
     }
 
 

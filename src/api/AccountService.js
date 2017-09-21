@@ -5,71 +5,65 @@ import _ from 'lodash';
 
 export let JWT_TOKEN = null;
 
-export default class AccountService {
+export async function loadUser() {
 
+    JWT_TOKEN = await AsyncStorage.getItem('@OkusisStore:jwtToken');
 
-    async loadUser() {
+    if (_.isEmpty(JWT_TOKEN)) {
+        return null;
+    }
 
-        JWT_TOKEN = await AsyncStorage.getItem('@OkusisStore:jwtToken');
-
-        if (_.isEmpty(JWT_TOKEN)) {
-            return null;
+    let response = await fetch("http://www.ozelcozum.net/api/authenticate", {
+        headers: {
+            'Authorization': JWT_TOKEN,
         }
+    });
 
-        let response = await fetch("http://www.ozelcozum.net/api/authenticate", {
-            headers: {
-                'Authorization': JWT_TOKEN,
-            }
-        });
+    if (response.status !== 200) {
+        return null;
+    }
 
-        if (response.status !== 200) {
-            return null;
-        }
+    return JWT_TOKEN;
 
-        return JWT_TOKEN;
+}
 
+export async function authenticate(username, password, navigate) {
+
+    let response = await fetch("http://www.ozelcozum.net/api/authenticate", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password,
+            rememberMe: true
+        })
+    });
+
+    if (response.status !== 200) {
+        Alert.alert('Giris Başarısız', 'Hatalı Kullanıcı Adı yada Parola');
+        return false;
     }
 
 
-    async authenticate(username, password, navigate) {
+    let jwtTooken = response.headers.get("authorization");
 
-        let response = await fetch("http://www.ozelcozum.net/api/authenticate", {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password,
-                rememberMe: true
-            })
-        });
+    await AsyncStorage.setItem('@OkusisStore:jwtToken', jwtTooken);
 
-        if (response.status !== 200) {
-            Alert.alert('Giris Başarısız', 'Hatalı Kullanıcı Adı yada Parola');
-            return false;
-        }
+    Alert.alert('Giris Basarili', "Anasayfaya yönlenmek için tamama basınız",
+        [
+            {text: 'Tamam', onPress: () => navigate("Route")},
+        ],
+        {cancelable: false});
+    return true;
+}
 
 
-        let jwtTooken = response.headers.get("authorization");
+export async function unauthenticate(navigate) {
 
-        await AsyncStorage.setItem('@OkusisStore:jwtToken', jwtTooken);
+    await AsyncStorage.removeItem('@OkusisStore:jwtToken', null);
 
-        Alert.alert('Giris Basarili', "Anasayfaya yönlenmek için tamama basınız",
-            [
-                {text: 'Tamam', onPress: () => navigate("Route")},
-            ],
-            { cancelable: false });
-        return true;
-    }
-
-    async unauthenticate(navigate) {
-
-        await AsyncStorage.removeItem('@OkusisStore:jwtToken', null);
-
-        navigate("Route");
-    }
-
-
+    navigate("Route");
 }

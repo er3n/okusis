@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, View} from 'react-native';
-import AccountService from '../api/AccountService';
+import {unauthenticate} from '../api/AccountService';
 
 export default class MainScreen extends React.Component {
 
@@ -24,7 +24,7 @@ export default class MainScreen extends React.Component {
 
                 <Button
                     title="Çıkış"
-                    onPress={() => new AccountService().unauthenticate(navigate)
+                    onPress={() => unauthenticate(navigate)
                     }
                 />
 
