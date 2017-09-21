@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, FlatList, View, Switch} from 'react-native';
 import PassengerService from '../api/PassengerService';
+import PassengerItem from './PassengerItem';
 
 export default class PassengerScreen extends React.Component {
 
@@ -30,18 +31,14 @@ export default class PassengerScreen extends React.Component {
 
     }
 
-
     render() {
 
         return (
             <FlatList
                 data={this.state.passengers}
+                keyExtractor={(item, index) => item.id}
                 renderItem={({item}) =>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text>{item.ogrenci.isim}</Text>
-                        <Switch disabled={false} value={item.bindiMi}
-                                onValueChange={() => this.ogrenciDurumuDegisti(item)}/>
-                    </View>
+                    <PassengerItem passenger={item}/>
                 }
             />
 
